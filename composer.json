@@ -1,0 +1,19 @@
+{
+    "name": "kongflower/mini_paylib",
+    "description": "the mini app pay",
+    "keywords": ["alipay", "wechat", "toutiao"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "gang",
+            "email": "1355528968@qq.com"
+        }
+    ],
+    "require": {},
+    "autoload":{
+        "psr-4":{
+            "Kongflower\\Pay\\": "src"
+        }
+    }
+}
