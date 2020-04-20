@@ -7,10 +7,15 @@
     "authors": [
         {
             "name": "gang",
-            "email": "1355528968@qq.com"
+            "email": "1355528968@163.com"
         }
     ],
-    "require": {},
+    "require": {
+        "php": ">=7.0",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-redis":"*"
+    },
     "autoload":{
         "psr-4":{
             "Kongflower\\Pay\\": "src"
