@@ -1,8 +1,8 @@
 <?php
-namespace Kongflower\Pay\Gateway\wx;
+namespace Kongflower\Pay\Gateways\WX;
 
 use Kongflower\Pay\Exceptions\GatewaysException;
-use kongflower\pay\Gateway\Support\Request;
+use Kongflower\Pay\Gateways\Support\Request;
 
 class Weichat {
     

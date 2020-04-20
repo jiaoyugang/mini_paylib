@@ -1,5 +1,5 @@
 <?php
-namespace kongflower\pay\Gateway\Support;
+namespace Kongflower\Pay\Gateways\Support;
 
 final class Request {
 

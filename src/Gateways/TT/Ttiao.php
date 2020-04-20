@@ -1,5 +1,5 @@
 <?php
-namespace Kongflower\Pay\Gateway\tt;
+namespace Kongflower\Pay\Gateways\TT;
 
 class Ttiao
 {
