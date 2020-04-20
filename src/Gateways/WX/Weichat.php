@@ -101,7 +101,7 @@ class Weichat {
      * @param   array   $data
      * @return  string  $xml
      */
-    public static function toXml($data): string
+    public static function toXml( array $data): string
     {
         if (!is_array($data) || count($data) <= 0) {
             throw new GatewaysException('Convert To Xml Error! Invalid Array!');

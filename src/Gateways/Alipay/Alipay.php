@@ -1,6 +1,6 @@
 <?php
 
-namespace Kongflower\Pay\Gateway\alipay;
+namespace Kongflower\Pay\Gateways\Alipay;
 
 class Alipay 
 {
