@@ -161,10 +161,11 @@ class Weichat {
      * @author kongflower <18838952961@163.com>
      * 
      * 签名
+     * @param   array   array
      * @param   string  key  key设置路径：微信商户平台(pay.weixin.qq.com)-->账户设置-->API安全-->密钥设置
      * @return  string  signValue
      */
-    public static function generateSign(string $params,string $key) : string
+    public static function generateSign(array $params,string $key) : string
     {
          // 过滤控制（参数的值为空不参与签名）
          foreach ($params as $k => $v) {
