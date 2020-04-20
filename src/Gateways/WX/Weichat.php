@@ -3,7 +3,7 @@ namespace Kongflower\Pay\Gateways\WX;
 
 use Kongflower\Pay\Exceptions\GatewaysException;
 use Kongflower\Pay\Gateways\Support\Request;
-
+use think\facade\Cache;
 class Weichat {
     
      /**
@@ -12,12 +12,18 @@ class Weichat {
     const MODE_NORMAL = 'normal';
 
     /**
+     * 获取access_token
+     */
+    const TOKEN = 'token';
+
+    /**
      * @author kongflower <18838952961@163.com>
      * 
      * Const url.
      */
     const URL = [
         self::MODE_NORMAL => 'https://api.mch.weixin.qq.com/',
+        self::TOKEN => 'https://api.weixin.qq.com/',
     ];
 
     
@@ -187,6 +193,24 @@ class Weichat {
         $stringSignTemp = $stringA . 'key=' . $key;
         $signValue = mb_strtoupper(md5($stringSignTemp));
         return $signValue;
+    }
+
+
+    /**
+     * access_token是公众号的全局唯一接口调用凭据，公众号调用各接口时都需使用access_token。开发者需要进行妥善保存
+     * @param string https://developers.weixin.qq.com/doc/offiaccount/Basic_Information/Get_access_token.html
+     * 
+     * 获取access_token
+     */
+    protected static function getAccessToken($appid,$appsecret){
+        $access_token = Cache::get('wx_token');
+        if(!$access_token){
+            $result = Request::send(self::URL[self::TOKEN],['grant_type' => 'client_credential' ,'appid' => $appid ,'secret' => $appsecret] ,'GET');
+            $tokenInfo = json_decode($result,true);
+            $access_token = $tokenInfo['access_token'] ;
+            Cache::set('wx_token',$access_token, (intval($tokenInfo['expires_in']) - 200));
+        }
+        return $access_token;
     }
     
 

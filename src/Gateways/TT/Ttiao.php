@@ -1,6 +1,8 @@
 <?php
 namespace Kongflower\Pay\Gateways\TT;
 
+use Kongflower\Pay\Gateways\Support\Request;
+use think\facade\Cache;
 class Ttiao
 {
     /**
@@ -8,7 +10,7 @@ class Ttiao
      * 
      * Const url.
      */
-    const URL = 'https://api.mch.weixin.qq.com/';
+    const URL = 'https://developer.toutiao.com/';
 
      /**
      * 生成字节跳动小程序sign签名
@@ -80,4 +82,24 @@ class Ttiao
         }
         return $data;
     }
+    
+    /**
+     * 获取accessToken,有效时间2小时，需要定时刷新
+     * @param string appid
+     * @param string appsecret
+     * @param string grant_type=client_credential
+     * 
+     */
+    public static function getAccessToken($appid,$appsecret)
+    {
+        $access_token = Cache::get('tt_token');
+        if(!$access_token){
+            $result = Request::send(self::URL.'api/apps/token',['appid' => $appid ,'secret' => $appsecret,'grant_type' => 'client_credential'],'GET');
+            $tokenInfo = json_decode($result,true);
+            $access_token = $tokenInfo['access_token'] ;
+            Cache::set('tt_token', $access_token , (intval($tokenInfo['expires_in']) - 200 ));
+        }
+        return $access_token;
+    }
+    
 }
