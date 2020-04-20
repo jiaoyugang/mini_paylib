@@ -16,7 +16,12 @@ final class Request {
      * @param $options[cert] 设置证书（支付配置）
      * @return boolean|string
      */
-    public static function send($url, $method, $options = []){
+    public static function send($url , $data , $method, $options = []){
+        if(mb_strtoupper($method) == "POST"){
+            $options['data'] = $data;
+        }elseif(mb_strtoupper($method) == "GET"){
+            $options['query'] = $data;
+        }
         $curl = curl_init();
         // GET 参数设置
         if (!empty($options['query'])) {

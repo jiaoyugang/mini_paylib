@@ -41,7 +41,7 @@ class Weichat {
     /**
      * 单例初始化对象
      */
-    public function getInstance()
+    public static function getInstance()
     {
         if(is_null(self::$instance) || self::$instance instanceof self){
             self::$instance = new self();
@@ -75,9 +75,9 @@ class Weichat {
             'notify_url'    => $data['notify_url'],  //微信回调地址
             'out_trade_no'  => $data['out_order_no'],
             'spbill_create_ip'  => Request::getRealIp(),
-            'scene_info'    => $data['scene_info'] ? $data['scene_info'] : '{"h5_info": {"type":"Wap","wap_url": "https://fortune.skinrun.cn","wap_name": "面相分析"}}',
+            'scene_info'    => isset($data['scene_info']) ? $data['scene_info'] : '{"h5_info": {"type":"Wap","wap_url": "https://fortune.skinrun.cn","wap_name": "面相分析"}}',
             'total_fee'     => $data['total_amount'],  //金额，分为单位
-            'trade_type'    => $data['trade_type'] ? $data['trade_type'] : 'MWEB', //H5支付的交易类型为MWEB
+            'trade_type'    => isset($data['trade_type']) ? $data['trade_type'] : 'MWEB', //H5支付的交易类型为MWEB
         ];
         // 组装签名
         $params['sign'] = self::generateSign($params,$data['key']);
@@ -85,11 +85,15 @@ class Weichat {
         $pay_param = self::toXml($params);
         // 发送请求
         $result = Request::send(self::URL[self::MODE_NORMAL].'pay/unifiedorder' ,'POST',$pay_param);
-        $$result = self::toArray($result);
-        if($result['return_code'] == 'SUCCESS' && $result['result_code']){
+        
+        $result = self::toArray($result);
+        // var_dump($result);exit;
+        if( (isset($result['return_code'])  && $result['return_code'] == 'SUCCESS') && (isset($result['result_code']) && $result['result_code'] = 'SUCCESS') ){
             $response = ['prepay_id' => $result['prepay_id'],'trade_type' => $result['trade_type'],'mweb_url' =>  $result['mweb_url']]; 
+        }elseif( isset($result['return_code'])  && $result['return_code'] == 'FAIL' ){
+            $response =  $result; //{ ["return_code"]=> string(4) "FAIL" ["return_msg"]=> string(69) "商户号该产品权限预开通中，请等待产品开通后重试" }
         }else{
-            $response = ['error_code' => $resul['err_code']];
+            $response = ['error_code' => $result['err_code'] ,'return_msg' => $result['return_msg']];
         }
         return $response;
         
