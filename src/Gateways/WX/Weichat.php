@@ -90,7 +90,8 @@ class Weichat {
         //数据转为xml格式
         $pay_param = self::toXml($params);
         // 发送请求
-        $result = Request::send(self::URL[self::MODE_NORMAL].'pay/unifiedorder' ,'POST',$pay_param);
+        $referer = isset($data['referer']) ? $data['referer'] : '';
+        $result = Request::send(self::URL[self::MODE_NORMAL].'pay/unifiedorder' ,$pay_param ,'POST' ,['referer' => $referer]);
         
         $result = self::toArray($result);
         // var_dump($result);exit;
