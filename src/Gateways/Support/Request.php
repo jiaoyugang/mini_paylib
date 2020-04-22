@@ -37,6 +37,10 @@ final class Request {
         if (!empty($options['cookie'])) {
             curl_setopt($curl, CURLOPT_COOKIE, $options['cookie']);
         }
+        // 伪造请求头
+        if(!empty($options['referer'])){
+            curl_setopt($curl, CURLOPT_REFERER,$options['referer']);
+        }
         if (!empty($options['cookie_file'])) {
             curl_setopt($curl, CURLOPT_COOKIEJAR, $options['cookie_file']);
             curl_setopt($curl, CURLOPT_COOKIEFILE, $options['cookie_file']);
@@ -46,6 +50,7 @@ final class Request {
             curl_setopt($curl, CURLOPT_POST, true);
             curl_setopt($curl, CURLOPT_POSTFIELDS, self::buildQueryData($options['data']));
         }
+
         // 请求超时设置
         if (isset($options['timeout']) && is_numeric($options['timeout'])) {
             curl_setopt($curl, CURLOPT_TIMEOUT, $options['timeout']);
