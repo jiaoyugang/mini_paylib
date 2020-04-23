@@ -213,6 +213,41 @@ class Weichat {
         }
         return $access_token;
     }
-    
+
+    /**
+     * 查询订单状态
+     * @param string    $data['appid']
+     * @param string    $data['mch_id']
+     * @param string    $data['transaction_id']
+     * @param string    $data['out_trade_no']
+     * @param string    $data['nonce_str']
+     * @param string    $data['sign']
+     * @param array     $result
+     */
+    public static function orderQuery(array $data):array
+    {
+        if( !isset($data['appid']) && empty($data['appid'])  ){
+            throw new \Exception('The appid is null');
+        }
+
+        if( !isset($data['mch_id']) && empty($data['mch_id'])  ){
+            throw new \Exception('The mch_id is null');
+        }
+
+        if( ( !isset($data['transaction_id']) && empty($data['transaction_id'])) && (!isset($data['out_trade_no']) && empty($data['out_trade_no']))  ){
+            throw new \Exception('The transaction_id or out_trade_no is null');
+        }
+
+        if( (!isset($data['nonce_str']) && empty($data['nonce_str']))  ){
+            throw new \Exception('The nonce_str is null');
+        }
+
+        if( (!isset($data['sign']) && empty($data['sign']))  ){
+            throw new \Exception('The sign is null');
+        }
+        $data = self::toXml($data);
+        $result = Request::send(self::URL[self::MODE_NORMAL].'pay/orderquery',$data,'POST');
+        return self::toArray($result);
+    }
 
 }
