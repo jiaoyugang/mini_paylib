@@ -96,7 +96,12 @@ class Weichat {
         $result = self::toArray($result);
         // var_dump($result);exit;
         if( (isset($result['return_code'])  && $result['return_code'] == 'SUCCESS') && (isset($result['result_code']) && $result['result_code'] = 'SUCCESS') ){
-            $response = ['prepay_id' => $result['prepay_id'],'trade_type' => $result['trade_type'],'mweb_url' =>  $result['mweb_url']]; 
+            if($params['trade_type'] == "MWEB"){
+                $response = ['prepay_id' => $result['prepay_id'],'trade_type' => $result['trade_type'],'mweb_url' =>  $result['mweb_url']]; 
+            }else{
+                $response = $result; 
+            }
+            
         }elseif( isset($result['return_code'])  && $result['return_code'] == 'FAIL' ){
             $response =  $result; //{ ["return_code"]=> string(4) "FAIL" ["return_msg"]=> string(69) "商户号该产品权限预开通中，请等待产品开通后重试" }
         }else{
@@ -105,6 +110,8 @@ class Weichat {
         return $response;
         
     }
+
+
     /**
      * @author kongflower <18838952961@163.com>
      * 
